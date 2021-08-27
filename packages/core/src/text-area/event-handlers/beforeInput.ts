@@ -35,6 +35,7 @@ function handleBeforeInput(e: Event, textarea: TextArea, editor: IDomEditor) {
 
   // These two types occur while a user is composing text and can't be
   // cancelled. Let them through and wait for the composition to end.
+  console.log('type', type)
   if (type === 'insertCompositionText' || type === 'deleteCompositionText') {
     return
   }

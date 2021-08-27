@@ -45,8 +45,8 @@ function handleOnKeydown(e: Event, textarea: TextArea, editor: IDomEditor) {
 
   if (readOnly) return
   if (!hasEditableTarget(editor, event.target)) return
-
   // 触发 menu 快捷键
+  console.log(event)
   triggerMenuHotKey(editor, event)
 
   // tab

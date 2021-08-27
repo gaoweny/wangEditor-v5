@@ -10,6 +10,7 @@ import TextArea from '../TextArea'
 import { hasEditableTarget } from '../helpers'
 import { IS_SAFARI, IS_FIREFOX_LEGACY, IS_CHROME } from '../../utils/ua'
 import { DOMNode } from '../../utils/dom'
+import updateView from '../update-view'
 
 const EDITOR_TO_TEXT: WeakMap<IDomEditor, string> = new WeakMap()
 const EDITOR_TO_START_CONTAINER: WeakMap<IDomEditor, DOMNode> = new WeakMap()
@@ -49,9 +50,11 @@ export function handleCompositionStart(e: Event, textarea: TextArea, editor: IDo
  * @param editor editor
  */
 export function handleCompositionUpdate(event: Event, textarea: TextArea, editor: IDomEditor) {
+  textarea.isComposing = true
   if (!hasEditableTarget(editor, event.target)) return
 
-  textarea.isComposing = true
+  console.log('handleCompositionUpdate')
+  editor.emit('change')
 }
 
 /**
@@ -61,10 +64,11 @@ export function handleCompositionUpdate(event: Event, textarea: TextArea, editor
  * @param editor editor
  */
 export function handleCompositionEnd(e: Event, textarea: TextArea, editor: IDomEditor) {
+  console.log('handleCompositionEnd1112')
   const event = e as CompositionEvent
 
-  if (!hasEditableTarget(editor, event.target)) return
   textarea.isComposing = false
+  if (!hasEditableTarget(editor, event.target)) return
 
   const { selection } = editor
   if (selection == null) return
@@ -76,6 +80,7 @@ export function handleCompositionEnd(e: Event, textarea: TextArea, editor: IDomE
   if (DomEditor.checkMaxLength(editor, data)) {
     const domRange = DomEditor.toDOMRange(editor, selection)
     domRange.startContainer.textContent = EDITOR_TO_TEXT.get(editor) || ''
+    // TODO: check ?
     textarea.changeViewState() // 重新定位光标
     return
   }

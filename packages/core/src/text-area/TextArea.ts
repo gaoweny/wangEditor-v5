@@ -150,7 +150,7 @@ class TextArea {
     updateView(this, editor)
 
     // 处理 placeholder
-    handlePlaceholder(this, editor)
+    // handlePlaceholder(this, editor)
 
     // 同步选区（异步，否则拿不到 DOM 渲染结果，vdom）
     promiseResolveThen(() => {
